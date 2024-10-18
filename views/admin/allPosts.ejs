@@ -1,0 +1,55 @@
+<div class="admin-posts-container"></div>
+    <div class="admin-posts-header">
+        <h1 class="admin-posts-heading"><%= locals.title %></h1>
+        <a href="/admin/add" class="admin-btn admin-btn-add">새 게시물</a>
+    </div>
+    
+    <% if (typeof data !== 'undefined' && data.length > 0) { %>
+        <ul class="admin-posts-list">
+            <% data.forEach(post => { %>
+                <li class="admin-post-item">
+                    <div class="admin-post-content">
+                        <a href="/admin/post/<%= post._id %>" class="admin-post-title"><%= post.title %></a>
+                        <span class="admin-post-date"><%= post.createdAt ? new Date(post.createdAt).toLocaleDateString('ko-KR') : '날짜 없음' %></span>
+                    </div>
+                    <div class="admin-post-actions">
+                        <a href="/admin/edit/<%= post._id %>" class="admin-btn admin-btn-edit">편집</a>
+                        <form action="/admin/delete/<%= post._id %>?_method=DELETE" method="POST" class="admin-delete-form">
+                            <button type="submit" class="admin-btn admin-btn-delete">삭제</button>
+                        </form>
+                    </div>
+                </li>
+            <% }); %>
+        </ul>
+    <% } else { %>
+        <p class="no-posts">게시물이 없습니다.</p>
+    <% } %>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const deleteForms = document.querySelectorAll('.admin-delete-form');
+        deleteForms.forEach(form => {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (confirm('정말로 이 게시물을 삭제하시겠습니까?')) {
+                    try {
+                        const response = await fetch(form.action, {
+                            method: 'DELETE',
+                        });
+                        const result = await response.json();
+                        if (result.success) {
+                            alert(result.message);
+                            form.closest('.admin-post-item').remove(); // 화면에서 게시물 항목 제거
+                        } else {
+                            alert(result.message || '게시물 삭제 중 오류가 발생했습니다.');
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        alert('게시물 삭제 중 오류가 발생했습니다.');
+                    }
+                }
+            });
+        });
+    });
+    </script>

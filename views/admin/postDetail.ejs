@@ -1,0 +1,18 @@
+<div class="post-detail-container"></div>
+    <div class="post-detail-content">
+        <div class="post-detail-header">
+            <h1 class="post-detail-title"><%= post.title %></h1>
+            <span class="post-detail-date"><%= post.createdAt ? new Date(post.createdAt).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' }) : '날짜 없음' %></span>
+        </div>
+        <div class="post-detail-body">
+            <%= post.body %>
+        </div>
+    </div>
+    <div class="post-detail-actions">
+        <a href="/admin/edit/<%= post._id %>" class="admin-btn admin-btn-edit">편집</a>
+        <form action="/admin/delete/<%= post._id %>?_method=DELETE" method="POST" class="admin-delete-form">
+            <button type="submit" class="admin-btn admin-btn-delete">삭제</button>
+        </form>
+        <a href="/admin/allPosts" class="admin-btn">목록으로 돌아가기</a>
+    </div>
+</div>

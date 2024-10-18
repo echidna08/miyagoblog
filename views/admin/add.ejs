@@ -1,0 +1,48 @@
+<div class="admin-container"></div>
+    <h1 class="admin-heading">새 게시물 작성</h1>
+    
+    <form action="admin/add" method="POST" class="admin-form">
+        <div class="form-group">
+            <label for="title" class="form-label">제목</label>
+            <input type="text" id="title" name="title" required class="form-input">
+        </div>
+        
+        <div class="form-group">
+            <label for="body" class="form-label">내용</label>
+            <textarea id="body" name="body" required class="form-textarea"></textarea>
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="admin-btn admin-btn-primary">게시물 등록</button>
+            <a href="/admin/allPosts" class="admin-btn">취소</a>
+        </div>
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', (event) => {
+    const form = document.querySelector('.admin-form');
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+        try {
+            const response = await fetch('/admin/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(Object.fromEntries(formData)),
+            });
+            if (response.ok) {
+                window.location.href = '/admin/allPosts';
+            } else {
+                const error = await response.json();
+                alert('게시물 등록 실패: ' + error.message);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('게시물 등록 중 오류가 발생했습니다.');
+        }
+    });
+});
+</script>

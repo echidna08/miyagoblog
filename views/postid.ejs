@@ -1,0 +1,14 @@
+<div class="post-detail-container">
+    <div class="post-detail-content">
+      <div class="post-detail-header">
+        <h1 class="post-detail-title"><%= data.title %></h1>
+        <span class="post-detail-date"><%= data.createdAt ? new Date(data.createdAt).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' }) : '날짜 없음' %></span>
+      </div>
+      <div class="post-detail-body">
+        <%= data.body %>
+      </div>
+    </div>
+    <div class="post-detail-actions">
+      <a href="/posts" class="back-to-posts">목록으로 돌아가기</a>
+    </div>
+  </div>
